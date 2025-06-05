@@ -1,6 +1,8 @@
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Fire {
     /**
@@ -44,8 +46,32 @@ public class Fire {
         // just a location. What other information might be useful?
         int[] start = {matchR, matchC};
         List<int[]> neighbors = getNeighbors(forest, start);
+        boolean[][] visited = new boolean[forest.length][forest[0].length];
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(start);
+
+
+        while (!queue.isEmpty()) {
+            int[] treeLocation = queue.poll();
+            
+            int curR = treeLocation[0];
+            int curC = treeLocation[1];
+            int curDepth = treeLocation[2];
+            
+            if (visited[curR][curC]) {
+                continue;
+            }
+            visited[curR][curC] = true;
+
+            if (forest[curR][curC] == 't') {
+                curDepth++;
+                
+            }
+
+        }
         
-        return -1;
+        return minTime;
     }
 
     public static List<int[]> getNeighbors(char[][] forest, int[] current) {
