@@ -1,3 +1,7 @@
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Fire {
     /**
      * Returns how long it takes for all vulnerable trees to be set on fire if a
@@ -38,6 +42,38 @@ public class Fire {
     public static int timeToBurn(char[][] forest, int matchR, int matchC) {
         // HINT: when adding to your BFS queue, you can include more information than
         // just a location. What other information might be useful?
+        int[] start = {matchR, matchC};
+        List<int[]> neighbors = getNeighbors(forest, start);
+        
         return -1;
+    }
+
+    public static List<int[]> getNeighbors(char[][] forest, int[] current) {
+        int curR = current[0];
+        int curC = current[1];
+
+        int[][] directions = {
+            {-1,0},
+            {1,0},
+            {0-1},
+            {0,1}
+        };
+
+        List<int[]> neighbors = new ArrayList<>();
+        for(int[] direction : directions) {
+            int changeCurR = direction[0];
+            int changeCurC = direction[1];
+            int newCurR = changeCurR + curR;
+            int newCurC= changeCurC + curC;
+
+            if(newCurR >=0 && newCurR < forest.length &&
+                newCurC >=0 && newCurC < forest[newCurR].length &&
+                    forest[newCurR][newCurC] == 't') {
+                        int[] treeLocation =  {newCurR, newCurC};
+                        neighbors.add(treeLocation);
+            }
+
+        }
+        return neighbors;
     }
 }
