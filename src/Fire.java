@@ -1,4 +1,3 @@
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,12 +58,11 @@ public class Fire {
             int curC = treeLocation[1];
             int curTime = treeLocation[2];
             
-            if (curR <   0 || curR >= forest.length || curC < 0 || curC >= forest[0].length) {
-                continue; // Skip out of bounds
-            }
-
-            if (visited[curR][curC] || forest[curR][curC] != 't') {
-                continue; // skip visited and non trees
+            if (curR < 0 || curR >= forest.length || 
+                curC < 0 || curC >= forest[0].length ||
+                visited[curR][curC] || 
+                forest[curR][curC] != 't') {
+                continue; // consolidated multiple if statements into a single if statement
             }
 
             visited[curR][curC] = true;
@@ -74,7 +72,7 @@ public class Fire {
                 queue.add(new int[]{neighbor[0], neighbor[1], curTime + 1});
             }            
         }
-        
+
         return maxTime;
     }
 
@@ -83,10 +81,10 @@ public class Fire {
         int curC = current[1];
 
         int[][] directions = {
-            {-1,0},
-            {1,0},
-            {0,-1},
-            {0,1}
+            {-1, 0},
+            {1, 0},
+            {0, -1},
+            {0, 1}
         };
 
         List<int[]> neighbors = new ArrayList<>();
@@ -99,11 +97,11 @@ public class Fire {
             if(newCurR >=0 && newCurR < forest.length &&
                 newCurC >=0 && newCurC < forest[newCurR].length &&
                     forest[newCurR][newCurC] == 't') {
-                        int[] treeLocation =  {newCurR, newCurC};
+                        int[] treeLocation = {newCurR, newCurC};
                         neighbors.add(treeLocation);
             }
-
         }
+
         return neighbors;
     }
 }
