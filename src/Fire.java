@@ -44,44 +44,48 @@ public class Fire {
     public static int timeToBurn(char[][] forest, int matchR, int matchC) {
         // HINT: when adding to your BFS queue, you can include more information than
         // just a location. What other information might be useful?
-        int[] start = {matchR, matchC};
-        List<int[]> neighbors = getNeighbors(forest, start);
+        int[] start = {matchR, matchC, 0}; // 0 stands for time
         boolean[][] visited = new boolean[forest.length][forest[0].length];
 
         Queue<int[]> queue = new LinkedList<>();
         queue.add(start);
 
+        int maxTime = 0; // Tracks the time(depth) of trees burning
 
         while (!queue.isEmpty()) {
             int[] treeLocation = queue.poll();
             
             int curR = treeLocation[0];
             int curC = treeLocation[1];
-            int curDepth = treeLocation[2];
+            int curTime = treeLocation[2];
             
-            if (visited[curR][curC]) {
-                continue;
+            if (curR <   0 || curR >= forest.length || curC < 0 || curC >= forest[0].length) {
+                continue; // Skip out of bounds
             }
+
+            if (visited[curR][curC] || forest[curR][curC] != 't') {
+                continue; // skip visited and non trees
+            }
+
             visited[curR][curC] = true;
+            maxTime = Math.max(maxTime, curTime);
 
-            if (forest[curR][curC] == 't') {
-                curDepth++;
-                
-            }
-
+            for (int[] neighbor : getNeighbors(forest, treeLocation, visited)) {
+                queue.add(new int[]{neighbor[0], neighbor[1], curTime + 1});
+            }            
         }
         
-        return minTime;
+        return maxTime;
     }
 
-    public static List<int[]> getNeighbors(char[][] forest, int[] current) {
+    public static List<int[]> getNeighbors(char[][] forest, int[] current, boolean[][] visited) {
         int curR = current[0];
         int curC = current[1];
 
         int[][] directions = {
             {-1,0},
             {1,0},
-            {0-1},
+            {0,-1},
             {0,1}
         };
 
